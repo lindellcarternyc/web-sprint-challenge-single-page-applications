@@ -1,15 +1,60 @@
-import React from 'react'
+import React, { useState } from 'react'
 import styled from 'styled-components'
 
 const FormWrapper = styled.div`
    & > p {
        text-align: center;
    }
+
+   form > div > label:first-of-type {
+    display: block;
+    background-color: black;
+    color: white;
+    padding: 1rem;
+   }
+
+   .input-wrapper {
+       padding: 1rem;
+   }
 `
 
+const INITIAL_FORM_VALUES = {
+    name: '',
+    size: 'Large',
+    sauce: 'red',
+    toppings: [],
+    special: ''
+}
+
 export default function Form(props) {
+    const [formValues, setFormValues] = useState(INITIAL_FORM_VALUES)
+
     const submit = (evt) => {
         evt.preventDefault()
+        console.log(formValues)
+    }
+
+    const change = (evt) => {
+        console.log(evt.target)
+        const { name, value } = evt.target
+
+        if (name === 'toppings') {
+            if (formValues.toppings.includes(value)) {
+                return setFormValues({
+                    ...formValues,
+                    toppings: formValues.toppings.filter(t => t !== value)
+                })
+            } else {
+                return setFormValues({
+                    ...formValues,
+                    toppings: formValues.toppings.concat(value)
+                })
+            }
+        }
+        setFormValues({
+            ...formValues,
+            [name]: value
+        })
     }
 
     return (
@@ -19,70 +64,87 @@ export default function Form(props) {
             <h2> Build Your Own Pizza</h2>
             <form onSubmit={submit}>
                 <div>
+                    <label htmlFor="name">
+                        <h4>Name</h4>
+                        <p>Required</p>
+                    </label>
+                    <div className="input-wrapper">
+                        <input id="name" name="name" value={formValues.name} onChange={change}/>
+                    </div>
+                </div>
+                <div>
                     <label htmlFor="size">
                         <h4>Choice of Size</h4>
                         <p>Required</p>
                     </label>
-                    <select name="size">
-                        <option value="personal">Personal</option>
-                        <option value="small">Small</option>
-                        <option value="medium">Medium</option>
-                        <option value="large">Large</option>
-                        <option value="extra_large">Extra Large</option>
-                    </select>
+                    <div className="input-wrapper">
+                        <select id="size" name="size" onChange={change} value={formValues.size}>
+                            <option value="personal">Personal</option>
+                            <option value="small">Small</option>
+                            <option value="medium">Medium</option>
+                            <option value="large">Large</option>
+                            <option value="extra_large">Extra Large</option>
+                        </select>
+                    </div>
                 </div>
                 <div>
                     <label htmlFor="sauce">
-                        <h4>Choice of Size</h4>
+                        <h4>What sauce</h4>
                         <p>Required</p>
                     </label>
-                    <div>
-                        <input name="sauce" id="red" value="Original Red" type="radio" />
-                        <label htmlFor="red">Original Red</label>
-                    </div>
-                    
-                    <div>
-                        <input name="sauce" id="garlic" value="Garlic Ranch" type="radio" />
-                        <label htmlFor="garlic">Garlic Ranch</label>
-                    </div>
-                    
-                    <div>
-                        <input name="sauce" id="bbq" value="BBQ Sauce" type="radio" />
-                        <label htmlFor="bbq">BBQ Sauce</label>
-                    </div>
+                    <div className="input-wrapper">
+                        <div>
+                            <input name="sauce" id="red" value="Original Red" type="radio" onChange={change} />
+                            <label htmlFor="red">Original Red</label>
+                        </div>
+                        
+                        <div>
+                            <input name="sauce" id="garlic" value="Garlic Ranch" type="radio" onChange={change} />
+                            <label htmlFor="garlic">Garlic Ranch</label>
+                        </div>
+                        
+                        <div>
+                            <input name="sauce" id="bbq" value="BBQ Sauce" type="radio" onChange={change} />
+                            <label htmlFor="bbq">BBQ Sauce</label>
+                        </div>
 
-                    <div>
-                        <input name="sauce" id="spinach" value="Spinach Alfredo" type="radio" />
-                        <label htmlFor="">Original Red</label>
+                        <div>
+                            <input name="sauce" id="spinach" value="Spinach Alfredo" type="radio" onChange={change} />
+                            <label htmlFor="">Original Red</label>
                     </div>
+                    </div>    
                 </div>
                 <div>
                     <label>
                         <h4>Add Toppings</h4>
                         <p>Choose a few</p>
                     </label>
-                    <div>
-                        <input type="checkbox" id="vehicle1" name="vehicle1" value="Bike" />
-                        <label for="vehicle1"> I have a bike</label>
-                    </div>
-                    <div>
-                        <input type="checkbox" id="vehicle1" name="vehicle1" value="Bike" />
-                        <label for="vehicle1"> I have a bike</label>
-                    </div>
-                    <div>
-                        <input type="checkbox" id="vehicle1" name="vehicle1" value="Bike" />
-                        <label for="vehicle1"> I have a bike</label>
-                    </div>
-                    <div>
-                        <input type="checkbox" id="vehicle1" name="vehicle1" value="Bike" />
-                        <label for="vehicle1"> I have a bike</label>
+                    <div className="input-wrapper">
+                        <div>
+                            <input type="checkbox" id="pineapple" name="toppings" value="pineapple" onChange={change} checked={formValues.toppings.includes('pineapple')}/>
+                            <label htmlFor="pineapple"> Pineapple</label>
+                        </div>
+                        <div>
+                            <input type="checkbox" id="mushroom" name="toppings" value="mushroom" />
+                            <label htmlFor="mushroom"> Mushrooms</label>
+                        </div>
+                        <div>
+                            <input type="checkbox" id="vehicle1" name="toppings" value="pepperoni" />
+                            <label htmlFor="pepperoni"> Pepperoni</label>
+                        </div>
+                        <div>
+                            <input type="checkbox" id="anchovies" name="toppings" value="anchovies" />
+                            <label htmlFor="anchovies"> Anchovies</label>
+                        </div>
                     </div>
                 </div>
                 <div>
                     <label htmlFor="special">
                         <h4>Special Instructions</h4>
                     </label>
-                    <input />
+                    <div className="input-wrapper">
+                        <input name="special" onChange={change} value={formValues.special} />
+                    </div>
                 </div>
                 <button type="submit">Order Now</button>
             </form>
