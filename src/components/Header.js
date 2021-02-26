@@ -1,5 +1,8 @@
 import React from 'react'
+import { useHistory, useLocation, Link } from 'react-router-dom'
 import styled from 'styled-components'
+
+import Button from './Button'
 
 const HeaderWrapper = styled.header`
     padding: 1rem;
@@ -11,32 +14,40 @@ const HeaderWrapper = styled.header`
     position: fixed;
     width: 100%;
 
-    & > div > button {
-        margin-right: 1rem;
-        padding: 0.5rem 1rem;
-        background-color: black;
+    a {
         color: white;
-        outline: none;
-        border: 2px solid white;
-        cursor: pointer;
+    }
 
-        transition: all 0.3s ease-in-out;
+    button {
+        margin-right: 1rem;
 
-        &:hover {
-            background-color: white;
+        &.active {
             color: black;
+            background-color: white;
+            border: 2px solid black;
         }
     }
 `
 
 export default function Header(props) {
+    const history = useHistory()
+    
+    const location = useLocation()
+    const onClickHome = () => {
+        if (location.pathname !== '/') {
+            history.push('/')
+        }
+    }
+
     return (
         <HeaderWrapper>
-            <h3>LAMBDA EATS</h3>
+            <h3>
+                <Link to="/">LAMBDA EATS</Link>
+            </h3>
 
             <div>
-                <button>Home</button>
-                <button>Help</button>
+                <Button onClick={onClickHome} className={location.pathname === '/' ? 'active' : ''}>Home</Button>
+                <Button>Help</Button>
             </div>
         </HeaderWrapper>
     )

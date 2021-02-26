@@ -21,11 +21,12 @@ const ButtonWrapper = styled.button`
 export default function Button(props) {
     const { 
         children,
-        onClick
+        onClick,
+        className
     } = props
 
     return (
-        <ButtonWrapper onClick={onClick}>
+        <ButtonWrapper onClick={onClick} className={className}>
             {children}
         </ButtonWrapper>
     )
