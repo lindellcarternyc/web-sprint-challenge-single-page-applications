@@ -1,7 +1,8 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import styled from 'styled-components'
-
 import * as yup from 'yup'
+
+import Button from './Button'
 
 const FormWrapper = styled.div`
    & > p {
@@ -174,7 +175,7 @@ export default function Form(props) {
                         <input name="special" onChange={change} value={formValues.special} />
                     </div>
                 </div>
-                <button type="submit">Order Now</button>
+                <Button type="submit" onClick={submit}>Order Now</Button>
             </form>
         </FormWrapper>
     )

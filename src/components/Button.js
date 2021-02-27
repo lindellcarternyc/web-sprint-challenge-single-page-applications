@@ -22,11 +22,12 @@ export default function Button(props) {
     const { 
         children,
         onClick,
-        className
+        className,
+        type
     } = props
 
     return (
-        <ButtonWrapper onClick={onClick} className={className}>
+        <ButtonWrapper onClick={onClick} className={className} type={type}>
             {children}
         </ButtonWrapper>
     )
