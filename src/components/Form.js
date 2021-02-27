@@ -157,7 +157,7 @@ export default function Form(props) {
                             <label htmlFor="mushroom"> Mushrooms</label>
                         </div>
                         <div>
-                            <input type="checkbox" id="vehicle1" name="toppings" value="pepperoni" />
+                            <input type="checkbox" id="pepperoni" name="toppings" value="pepperoni" />
                             <label htmlFor="pepperoni"> Pepperoni</label>
                         </div>
                         <div>
