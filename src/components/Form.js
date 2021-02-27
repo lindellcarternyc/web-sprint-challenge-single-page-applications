@@ -1,5 +1,7 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
+
+import * as yup from 'yup'
 
 const FormWrapper = styled.div`
    & > p {
@@ -26,16 +28,32 @@ const INITIAL_FORM_VALUES = {
     special: ''
 }
 
+const INITIAL_FORM_ERRORS = {
+    name: ''
+}
+
+const formSchema = yup.object().shape({
+    name: yup.string().required().min(2),
+    sauce: yup.string(),
+    size: yup.string(),
+    toppings: yup.array(yup.string()),
+    special: yup.string()
+})
+
 export default function Form(props) {
     const [formValues, setFormValues] = useState(INITIAL_FORM_VALUES)
+    const [formErrors, setFormErrors] = useState(INITIAL_FORM_ERRORS)
 
     const submit = (evt) => {
         evt.preventDefault()
-        console.log(formValues)
+        
+        formSchema.isValid(formValues)
+            .then(() => props.onSubmit(formValues))
+        
+        setFormValues(INITIAL_FORM_VALUES)
     }
 
     const change = (evt) => {
-        console.log(evt.target)
         const { name, value } = evt.target
 
         if (name === 'toppings') {
@@ -55,6 +73,15 @@ export default function Form(props) {
             ...formValues,
             [name]: value
         })
+
+        yup.reach(formSchema, name)
+            .validate(value)
+            .then(_ => {
+                setFormErrors({ ...formErrors, [name]: '' })
+            })
+            .catch(err => {
+                setFormErrors({ ...formErrors, [name]: err.errors[0] })
+            })
     }
 
     return (
@@ -70,6 +97,7 @@ export default function Form(props) {
                     </label>
                     <div className="input-wrapper">
                         <input id="name" name="name" value={formValues.name} onChange={change}/>
+                        {formErrors.name && <p>{formErrors.name}</p>}
                     </div>
                 </div>
                 <div>
@@ -95,22 +123,22 @@ export default function Form(props) {
                     <div className="input-wrapper">
                         <div>
                             <input name="sauce" id="red" value="Original Red" type="radio" onChange={change} />
-                            <label htmlFor="red">Original Red</label>
+                            <label htmlFor="red"> Original Red</label>
                         </div>
                         
                         <div>
                             <input name="sauce" id="garlic" value="Garlic Ranch" type="radio" onChange={change} />
-                            <label htmlFor="garlic">Garlic Ranch</label>
+                            <label htmlFor="garlic"> Garlic Ranch</label>
                         </div>
                         
                         <div>
                             <input name="sauce" id="bbq" value="BBQ Sauce" type="radio" onChange={change} />
-                            <label htmlFor="bbq">BBQ Sauce</label>
+                            <label htmlFor="bbq"> BBQ Sauce</label>
                         </div>
 
                         <div>
                             <input name="sauce" id="spinach" value="Spinach Alfredo" type="radio" onChange={change} />
-                            <label htmlFor="">Original Red</label>
+                            <label htmlFor=""> Spinach Alfredo</label>
                     </div>
                     </div>    
                 </div>
